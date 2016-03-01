@@ -52,12 +52,12 @@ router.post('/', function (req, res, next) {
                     var shorturl = response.data.url;
                     console.log(JSON.stringify(response));
                     console.log(shorturl);
-                    resolve(gifLocation, shorturl); 
+                    resolve({"gifLocation": gifLocation, "shorturl": shorturl}); 
                 });
             })
-        }).then(function displayGif(gifLocation, shorturl) {
-            console.log(shorturl);
-            res.render('index', { title: 'Done!', image: gifLocation, shorturl: shorturl })
+        }).then(function displayGif(locations) {
+            console.log(locations.shorturl);
+            res.render('index', { title: 'Done!', image: locations.gifLocation, shorturl: locations.shorturl })
         });
 });
 
