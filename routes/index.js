@@ -49,10 +49,10 @@ router.post('/', function (req, res, next) {
             return new Promise(function (resolve, reject) {
                 bitly.shorten("https://"+req.hostname+"/"+gifLocation)
                 .then(function(response) {
-                    var short_url = response.data.url;
+                    var shorturl = response.data.url;
                     console.log("https://"+req.hostname+"/"+gifLocation);
                     console.log(JSON.stringify(response));
-                    resolve(gifLocation, short_url); 
+                    resolve(gifLocation, shorturl); 
                 });
             })
         }).then(function displayGif(gifLocation, shorturl) {
