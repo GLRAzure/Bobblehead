@@ -1,4 +1,7 @@
 var express = require('express');
+var Bitly = require('bitly');
+var bitly = new Bitly(process.env.BITLY_API);
+
 var router = express.Router();
 
 /* GET home page. */
@@ -39,11 +42,21 @@ router.post('/', function (req, res, next) {
                     .pipe(encoder.createWriteStream({ repeat: 0, delay: 500 }))
                     .pipe(fs.createWriteStream(req.file.path + '.gif'))
                     .on('finish', function () {
-                        resolve(req.file.path + '.gif');
+                        resolve((req.file.path + '.gif').replace(/\134/g,"/"));
                     });
             })
-        }).then(function displayGif(gifLocation) {
-            res.render('index', { title: 'Done!', image: gifLocation })
+        }).then(function buildShortURL(gifLocation){
+            return new Promise(function (resolve, reject) {
+                bitly.shorten("https://"+req.hostname+"/"+gifLocation)
+                .then(function(response) {
+                    var short_url = response.data.url;
+                    console.log("https://"+req.hostname+"/"+gifLocation);
+                    console.log(JSON.stringify(response));
+                    resolve(gifLocation, short_url); 
+                });
+            })
+        }).then(function displayGif(gifLocation, shorturl) {
+            res.render('index', { title: 'Done!', image: gifLocation, shorturl: shorturl })
         });
 });
 
