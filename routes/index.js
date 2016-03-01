@@ -50,8 +50,8 @@ router.post('/', function (req, res, next) {
                 bitly.shorten("https://"+req.hostname+"/"+gifLocation)
                 .then(function(response) {
                     var shorturl = response.data.url;
-                    console.log("https://"+req.hostname+"/"+gifLocation);
                     console.log(JSON.stringify(response));
+                    console.log(shorturl);
                     resolve(gifLocation, shorturl); 
                 });
             })
