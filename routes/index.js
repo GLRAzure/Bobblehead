@@ -56,6 +56,7 @@ router.post('/', function (req, res, next) {
                 });
             })
         }).then(function displayGif(gifLocation, shorturl) {
+            console.log(shorturl);
             res.render('index', { title: 'Done!', image: gifLocation, shorturl: shorturl })
         });
 });
